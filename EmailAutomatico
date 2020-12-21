@@ -1,0 +1,52 @@
+function myFunction() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var formresponse = ss.getSheetByName("Respostas ao formulário 1");
+  var resposta = ss.getSheetByName("Respostas");
+  var ultimalinha = formresponse.getLastRow();
+  var inse=0,d=0,a=0,e=0,p=0,r=0,f=0,l=0,j=0,z=0;
+  
+  formresponse.activate()
+  
+  var email = SpreadsheetApp.getActiveSheet().getRange("B"+ultimalinha).getValue()
+  var nome = SpreadsheetApp.getActiveSheet().getRange("CY"+ultimalinha).getValue()
+  for(var i=3;i<103;i++){
+    var ca=formresponse.getRange(ultimalinha,i).getValue()
+    if(i<13){inse=inse+ca;}
+    if(i<23&&i>12){d=d+ca;}
+    if(i<33&&i>22){a=a+ca;}
+    if(i<43&&i>32){e=e+ca;}
+    if(i<53&&i>42){p=p+ca;}
+    if(i<63&&i>52){r=r+ca;}
+    if(i<73&&i>62){f=f+ca;}
+    if(i<83&&i>72){l=l+ca;}
+    if(i<93&&i>82){j=j+ca;}
+    if(i<103&&i>92){z=z+ca;}
+  } 
+  resposta.activate()
+  SpreadsheetApp.getActiveSpreadsheet().getRange("M2").setValue(nome)
+  var preencher=resposta.getLastRow()+1;
+  SpreadsheetApp.getActiveSpreadsheet().getRange("A"+preencher).setValue(nome)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("B"+preencher).setValue(inse)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("C"+preencher).setValue(d)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("D"+preencher).setValue(a)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("E"+preencher).setValue(e)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("F"+preencher).setValue(p)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("G"+preencher).setValue(r)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("H"+preencher).setValue(f)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("I"+preencher).setValue(l)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("J"+preencher).setValue(j)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("K"+preencher).setValue(z)
+  SpreadsheetApp.getActiveSpreadsheet().getRange("L"+preencher).setValue(email)
+  resposta.hideSheet();
+  formresponse.hideSheet();
+
+  var pdf = DriveApp.getFileById(ss.getId());
+  var anexo = pdf.getBlob().getAs('application/pdf').setName("Resposta ao questionário do " +nome);
+  var pastaDrive = '1TuQxYgCss3wq9awaFbHTd3tPnIg4VqT2';
+  var pasta = DriveApp.getFolderById(pastaDrive);
+  var Pdf = pasta.createFile(anexo);
+  MailApp.sendEmail(email, "Devolutiva IPE "+nome,"O INDICADOR DE PERFORMANCE EMOCIONAL (IPE) é um questionário elaborado pelo Instituto Você e é baseado nas competências socioemocionais, as quais podem ser definidas a partir de conhecimentos, habilidades e atitudes que compreendem categorias como comportamentos repetitivos, modelos linguísticos, crenças, traços de personalidade, qualidades emocionais e sociais, embasados em estudos de John Grinder e Richard Bandler, cocriadores da Programação Neurolinguística (PNL).\n\nAtualmente, esse conceito está relacionado à qualidade do desenvolvimento e ajustamento social e emocional das crianças, adolescentes e adultos, contribuindo para a promoção e avaliação do nível de prazer e bem-estar das pessoas ao longo da vida. Esse indicador baseia-se em pesquisas de Inteligência Emocional, área que tem como principal representante o psicólogo e pesquisador Daniel Goleman (1995).\n\nA construção do IPE foi pautada em posturas e comportamentos negativos, que geram frustrações quando não compreendidos e superados pelo indivíduo, causando desconforto emocional, baixa qualidade de vida e prazer, performance insatisfatória e que necessitam do desenvolvimento de competências socioemocionais saudáveis para saná-los, supri-los ou extingui-los.\n\nO IPE oferece a possibilidade do indivíduo autoavaliar as suas competências frente aos comportamentos negativos, associados às crenças e valores nos contextos social, profissional e familiar, oportunizando a construção de um projeto de vida que lhe permitirá o desenvolvimento de competências socioemocionais sadias, aumentando sua performance, saindo de um estado emocional enfraquecido para alcançar um estado emocional forte e saudável.\n\nCaso deseje algum esclarecimento, ou ainda, caso tenha interesse em desenvolver habilidades socioemocionais que reflitam no seu IPE, responda este email falando do seu interesse.\n\nProfessora Flávia Magalhães Freitas Ferreira (Coordenadora da Pesquisa)", {attachments:[anexo]});
+  resposta.showSheet();
+  formresponse.showSheet();
+   
+}
